@@ -16,17 +16,6 @@ var photoObjectSettings = {
   'maxComments': 10
 };
 
-function checkDuplicates(array) {
-  for (var i = 0, l = array.length; i < l; i++) {
-    for (var j = i; j < l; j++) {
-      if (i !== j && array[i] === array[j]) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 function getRandomNumberFromRange(start, end) {
   return Math.floor(Math.random() * end) + start;
 }
@@ -35,20 +24,16 @@ function getRandomArrayElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function generateUrl(num) {
-  return 'photos/' + getRandomNumberFromRange(1, num) + '.jpg';
-}
-
 function generateUniqueUrlArray(num) {
-  do {
-    var urlArray = [];
+  var urlArray = [];
 
-    for (var i = 0; i < num; i++) {
-      urlArray.push(generateUrl(num));
-    }
-  } while (checkDuplicates(urlArray));
+  for (var i = 1; i <= num; i++) {
+    urlArray.push('photos/' + i + '.jpg');
+  }
 
-  return urlArray;
+  return urlArray.sort(function () {
+    return 0.5 - Math.random();
+  });
 }
 
 function generateCommentsArray(comments, max) {
@@ -77,11 +62,11 @@ function generateCommentsArray(comments, max) {
 
 function generatePhotoObjects(num, settings) {
   var photos = [];
-  // var urls = generateUniqueUrlArray(settings.urls);
+  var urls = generateUniqueUrlArray(settings.urls);
 
   for (var i = 0; i < num; i++) {
     photos.push({
-      'url': generateUrl(settings.urls), // urls[i]
+      'url': urls[i],
       'likes': getRandomNumberFromRange(settings.minLikes, settings.maxLikes),
       'comments': generateCommentsArray(COMMENTS, settings.maxComments)
     });
@@ -124,5 +109,3 @@ galleryOverlay.querySelector('img').src = photoObjectsArray[0].url;
 galleryOverlay.querySelector('.likes-count').textContent = photoObjectsArray[0].likes;
 galleryOverlay.querySelector('.comments-count').textContent = photoObjectsArray[0].comments.length;
 galleryOverlay.classList.remove('invisible');
-
-// console.log(photoObjectsArray);
