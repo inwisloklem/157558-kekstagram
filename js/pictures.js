@@ -12,11 +12,10 @@ var COMMENTS = [
 ];
 
 var photoObjectSettings = {
-  'urls': 25,
+  'num': 25,
   'minLikes': 15,
   'maxLikes': 200,
-  'maxComments': 10,
-  'num': 25
+  'maxComments': 10
 };
 
 // Генерация объектов для последующего создания элементов на основе шаблона
@@ -67,7 +66,7 @@ function generateCommentsArray(comments, max) {
 
 function generatePhotoObjects(settings) {
   var photos = [];
-  var urls = generateUniqueUrlArray(settings.urls);
+  var urls = generateUniqueUrlArray(settings.num);
 
   for (var i = 0; i < settings.num; i++) {
     photos.push({
@@ -84,7 +83,7 @@ var photoObjectsArray = generatePhotoObjects(photoObjectSettings);
 
 // Отрисовка элементов на основе объектов из массива, создание фрагмента и добавление в DOM
 
-function renderPicture(photo, template) {
+function makeGalleryPicture(photo, template) {
   var photoElement = template.cloneNode(true);
 
   photoElement.querySelector('img').src = photo.url;
@@ -98,23 +97,29 @@ function makeFragment(photos, template) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < photos.length; i++) {
-    fragment.appendChild(renderPicture(photos[i], template));
+    fragment.appendChild(makeGalleryPicture(photos[i], template));
   }
 
   return fragment;
 }
 
-var pictureTemplate = document.querySelector('#picture-template').content;
+function fillGallery(photos) {
+  var template = document.querySelector('#picture-template').content;
+  var fragment = makeFragment(photos, template);
+  document.querySelector('.pictures').appendChild(fragment);
+}
 
-var fragmentPictures = makeFragment(photoObjectsArray, pictureTemplate);
+function makeMainPicture(photos) {
+  var galleryOverlay = document.querySelector('.gallery-overlay');
 
-document.querySelector('.pictures').appendChild(fragmentPictures);
+  galleryOverlay.querySelector('img').src = photos[0].url;
+  galleryOverlay.querySelector('.likes-count').textContent = photos[0].likes;
+  galleryOverlay.querySelector('.comments-count').textContent = photos[0].comments.length;
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
+  return galleryOverlay;
+}
 
-galleryOverlay.querySelector('img').src = photoObjectsArray[0].url;
-galleryOverlay.querySelector('.likes-count').textContent = photoObjectsArray[0].likes;
-galleryOverlay.querySelector('.comments-count').textContent = photoObjectsArray[0].comments.length;
+fillGallery(photoObjectsArray);
+makeMainPicture(photoObjectsArray).classList.remove('invisible');
 
 document.querySelector('.upload-overlay').classList.add('invisible');
-galleryOverlay.classList.remove('invisible');
