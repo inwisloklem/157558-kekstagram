@@ -106,6 +106,7 @@ function makeFragment(photos, template) {
 function fillGallery(photos) {
   var template = document.querySelector('#picture-template').content;
   var fragment = makeFragment(photos, template);
+
   document.querySelector('.pictures').appendChild(fragment);
 }
 
