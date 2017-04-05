@@ -116,10 +116,10 @@ function makeMainPicture(photos) {
   galleryOverlay.querySelector('.likes-count').textContent = photos[0].likes;
   galleryOverlay.querySelector('.comments-count').textContent = photos[0].comments.length;
 
-  return galleryOverlay;
+  galleryOverlay.classList.remove('invisible');
 }
 
 fillGallery(photoObjectsArray);
-makeMainPicture(photoObjectsArray).classList.remove('invisible');
+makeMainPicture(photoObjectsArray);
 
 document.querySelector('.upload-overlay').classList.add('invisible');
