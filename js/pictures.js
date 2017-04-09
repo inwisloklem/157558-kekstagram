@@ -110,17 +110,47 @@ function fillGallery(photos) {
   document.querySelector('.pictures').appendChild(fragment);
 }
 
-function makeMainPicture(photos) {
+function makeMainPicture(photo) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
 
-  galleryOverlay.querySelector('img').src = photos[0].url;
-  galleryOverlay.querySelector('.likes-count').textContent = photos[0].likes;
-  galleryOverlay.querySelector('.comments-count').textContent = photos[0].comments.length;
+  galleryOverlay.querySelector('img').src = photo.url;
+  galleryOverlay.querySelector('.likes-count').textContent = photo.likes;
+  galleryOverlay.querySelector('.comments-count').textContent = photo.comments.length;
 
-  galleryOverlay.classList.remove('invisible');
+  // galleryOverlay.classList.remove('invisible');
 }
 
 fillGallery(photoObjectsArray);
-makeMainPicture(photoObjectsArray);
+makeMainPicture(photoObjectsArray[0]);
 
 document.querySelector('.upload-overlay').classList.add('invisible');
+
+// Показ/скрытие картинки в галерее
+
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
+
+var galleryOpen = function () {
+  galleryOverlay.classList.remove('invisible');
+};
+
+var galleryClose = function () {
+  galleryOverlay.classList.add('invisible');
+};
+
+galleryOverlayClose.addEventListener('click', function () {
+  galleryClose();
+});
+
+var pictures = document.querySelectorAll('.picture');
+
+var onPictureClick = function (evt) {
+  evt.preventDefault();
+  makeMainPicture(photoObjectsArray[this.i]);
+  galleryOpen();
+};
+
+for (var i = 0; i < pictures.length; i++) {
+  pictures[i].i = i;
+  pictures[i].addEventListener('click', onPictureClick);
+}
