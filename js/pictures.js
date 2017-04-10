@@ -116,8 +116,6 @@ function makeMainPicture(photo) {
   galleryOverlay.querySelector('img').src = photo.url;
   galleryOverlay.querySelector('.likes-count').textContent = photo.likes;
   galleryOverlay.querySelector('.comments-count').textContent = photo.comments.length;
-
-  // galleryOverlay.classList.remove('invisible');
 }
 
 fillGallery(photoObjectsArray);
@@ -127,30 +125,123 @@ document.querySelector('.upload-overlay').classList.add('invisible');
 
 // Показ/скрытие картинки в галерее
 
+var ESC_KEY_CODE = 27;
+var ENTER_KEY_CODE = 13;
+
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 
-var galleryOpen = function () {
-  galleryOverlay.classList.remove('invisible');
+var pictures = document.querySelectorAll('.picture');
+
+var setGalleryOverlay = function (evt) {
+  galleryOverlay.querySelector('.gallery-overlay-image').src = evt.currentTarget.querySelector('img').src;
+  galleryOverlay.querySelector('.likes-count').textContent = evt.currentTarget.querySelector('.picture-likes').textContent;
+  galleryOverlay.querySelector('.comments-count').textContent = evt.currentTarget.querySelector('.picture-comments').textContent;
 };
 
-var galleryClose = function () {
+var isKeyPressed = function (evt, code) {
+  return evt.keyCode === code;
+};
+
+var onGalleryEscPress = function (evt) {
+  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+    closeGallery();
+  }
+};
+
+var openGallery = function () {
+  galleryOverlay.classList.remove('invisible');
+  document.addEventListener('keydown', onGalleryEscPress);
+};
+
+var closeGallery = function () {
   galleryOverlay.classList.add('invisible');
+  document.removeEventListener('keydown', onGalleryEscPress);
 };
 
 galleryOverlayClose.addEventListener('click', function () {
-  galleryClose();
+  closeGallery();
 });
 
-var pictures = document.querySelectorAll('.picture');
+galleryOverlayClose.addEventListener('keydown', function (evt) {
+  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
+    closeGallery();
+  }
+});
 
 var onPictureClick = function (evt) {
   evt.preventDefault();
-  makeMainPicture(photoObjectsArray[this.i]);
-  galleryOpen();
+  setGalleryOverlay(evt);
+  openGallery();
+};
+
+var onPictureKeydown = function (evt) {
+  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
+    evt.preventDefault();
+    setGalleryOverlay(evt);
+    openGallery();
+  }
 };
 
 for (var i = 0; i < pictures.length; i++) {
-  pictures[i].i = i;
   pictures[i].addEventListener('click', onPictureClick);
+  pictures[i].addEventListener('keydown', onPictureKeydown);
 }
+
+// Показ/скрытие формы кадрирования
+
+var uploadForm = document.querySelector('#upload-select-image');
+uploadForm.classList.remove('invisible');
+
+var uploadOverlay = document.querySelector('.upload-overlay');
+
+var uploadFile = uploadForm.querySelector('#upload-file');
+var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
+var uploadCancel = uploadOverlay.querySelector('#upload-cancel');
+var uploadDesc = uploadOverlay.querySelector('.upload-form-description');
+
+var onEscPress = function (evt) {
+  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+    closeUploadOverlay();
+  }
+};
+
+var openUploadOverlay = function () {
+  uploadOverlay.classList.remove('invisible');
+  document.addEventListener('keydown', onEscPress);
+};
+
+var closeUploadOverlay = function () {
+  uploadOverlay.classList.add('invisible');
+  document.removeEventListener('keydown', onEscPress);
+};
+
+uploadFile.addEventListener('change', function () {
+  openUploadOverlay();
+});
+
+uploadSubmit.addEventListener('click', function () {
+  closeUploadOverlay();
+});
+
+uploadSubmit.addEventListener('keydown', function (evt) {
+  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
+    closeUploadOverlay();
+  }
+});
+
+uploadCancel.addEventListener('click', function () {
+  closeUploadOverlay();
+});
+
+uploadCancel.addEventListener('keydown', function (evt) {
+  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
+    closeUploadOverlay();
+  }
+});
+
+uploadDesc.addEventListener('keydown', function (evt) {
+  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+    evt.stopPropagation();
+  }
+});
