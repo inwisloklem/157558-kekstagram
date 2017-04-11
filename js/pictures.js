@@ -209,12 +209,6 @@ uploadFile.addEventListener('change', function () {
   openUploadOverlay();
 });
 
-// uploadForm.addEventListener('keydown', function (evt) {
-//   if (isKeyPressed(evt, ENTER_KEY_CODE)) {
-//     openUploadOverlay();
-//   }
-// });
-
 uploadFilter.addEventListener('submit', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
