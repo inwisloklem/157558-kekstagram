@@ -175,17 +175,8 @@ var onPictureClick = function (evt) {
   openGallery();
 };
 
-var onPictureKeydown = function (evt) {
-  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
-    evt.preventDefault();
-    setGalleryOverlay(evt);
-    openGallery();
-  }
-};
-
 for (var i = 0; i < pictures.length; i++) {
   pictures[i].addEventListener('click', onPictureClick);
-  pictures[i].addEventListener('keydown', onPictureKeydown);
 }
 
 // Показ/скрытие формы кадрирования
@@ -194,11 +185,9 @@ var uploadForm = document.querySelector('#upload-select-image');
 uploadForm.classList.remove('invisible');
 
 var uploadOverlay = document.querySelector('.upload-overlay');
-
 var uploadFile = uploadForm.querySelector('#upload-file');
-var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
-var uploadCancel = uploadOverlay.querySelector('#upload-cancel');
 var uploadDesc = uploadOverlay.querySelector('.upload-form-description');
+var uploadFilter = document.querySelector('#upload-filter');
 
 var onEscPress = function (evt) {
   if (isKeyPressed(evt, ESC_KEY_CODE)) {
@@ -220,24 +209,12 @@ uploadFile.addEventListener('change', function () {
   openUploadOverlay();
 });
 
-uploadSubmit.addEventListener('click', function () {
+uploadFilter.addEventListener('submit', function () {
   closeUploadOverlay();
 });
 
-uploadSubmit.addEventListener('keydown', function (evt) {
-  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
-    closeUploadOverlay();
-  }
-});
-
-uploadCancel.addEventListener('click', function () {
+uploadFilter.addEventListener('reset', function () {
   closeUploadOverlay();
-});
-
-uploadCancel.addEventListener('keydown', function (evt) {
-  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
-    closeUploadOverlay();
-  }
 });
 
 uploadDesc.addEventListener('keydown', function (evt) {
