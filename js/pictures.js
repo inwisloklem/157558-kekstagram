@@ -212,11 +212,12 @@ uploadFile.addEventListener('change', function () {
 uploadFilterForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
-  uploadResetDefault();
+  resetUploadFilterForm();
 });
 
 uploadFilterForm.addEventListener('reset', function () {
   closeUploadOverlay();
+  resetUploadFilterForm();
 });
 
 uploadDesc.addEventListener('keydown', function (evt) {
@@ -279,7 +280,7 @@ uploadDescription.addEventListener('invalid', function (evt) {
 
 // Сброс на значения по умолчанию (добавлено в uploadFilterForm на событие 'submit')
 
-var uploadResetDefault = function () {
+var resetUploadFilterForm = function () {
   imagePreview.classList.remove(currentFilter);
   resizeControlsValue.value = '100%';
   uploadDescription.value = '';
