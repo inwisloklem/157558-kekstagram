@@ -282,7 +282,6 @@ uploadDescription.addEventListener('invalid', function (evt) {
 var uploadResetDefault = function () {
   imagePreview.classList.remove(currentFilter);
   resizeControlsValue.value = '100%';
-  imagePreview.removeAttribute('style');
   uploadDescription.value = '';
   uploadOverlay.querySelector('#upload-filter-none').checked = true;
   uploadDescription.style.outline = 'unset';
