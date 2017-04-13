@@ -187,7 +187,7 @@ uploadForm.classList.remove('invisible');
 var uploadOverlay = document.querySelector('.upload-overlay');
 var uploadFile = uploadForm.querySelector('#upload-file');
 var uploadDesc = uploadOverlay.querySelector('.upload-form-description');
-var uploadFilter = document.querySelector('#upload-filter');
+var uploadFilterForm = document.querySelector('#upload-filter');
 
 var onEscPress = function (evt) {
   if (isKeyPressed(evt, ESC_KEY_CODE)) {
@@ -209,13 +209,15 @@ uploadFile.addEventListener('change', function () {
   openUploadOverlay();
 });
 
-uploadFilter.addEventListener('submit', function (evt) {
+uploadFilterForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
+  resetUploadFilterForm();
 });
 
-uploadFilter.addEventListener('reset', function () {
+uploadFilterForm.addEventListener('reset', function () {
   closeUploadOverlay();
+  resetUploadFilterForm();
 });
 
 uploadDesc.addEventListener('keydown', function (evt) {
@@ -223,3 +225,76 @@ uploadDesc.addEventListener('keydown', function (evt) {
     evt.stopPropagation();
   }
 });
+
+// Применение фильтра к изображению
+
+var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
+var imagePreview = uploadOverlay.querySelector('.filter-image-preview');
+
+var currentFilter;
+
+var addFilter = function (filter) {
+  imagePreview.classList.remove(currentFilter);
+  if (filter !== 'none') {
+    imagePreview.classList.add(filter);
+    currentFilter = filter;
+  }
+};
+
+filterControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'input') {
+    addFilter('filter-' + evt.target.value);
+  }
+});
+
+// Изменение масштаба изображения
+
+var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
+var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
+var resizeControlsInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+var resizeControlsDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+
+var resizeImage = function (evt) {
+  var resizeValue = parseInt(resizeControlsValue.value, 10);
+
+  if (evt.target === resizeControlsInc && resizeValue !== 100) {
+    resizeValue += 25;
+  } else if (evt.target === resizeControlsDec && resizeValue !== 25) {
+    resizeValue -= 25;
+  }
+
+  resizeControlsValue.value = resizeValue + '%';
+  imagePreview.style.transform = ['scale(', resizeValue / 100, ')'].join('');
+};
+
+resizeControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'button') {
+    resizeImage(evt);
+  }
+});
+
+// Выделение незаполненного поля комментария красной рамкой
+
+var uploadDescription = uploadOverlay.querySelector('.upload-form-description');
+
+uploadDescription.addEventListener('invalid', function (evt) {
+  evt.target.style.outline = '4px solid #ff0000';
+});
+
+uploadDescription.addEventListener('input', function (evt) {
+  if (uploadDescription.value.trim().length < uploadDescription.minLength) {
+    evt.target.style.outline = '4px solid #ff0000';
+  } else {
+    evt.target.style.outline = 'unset';
+  }
+});
+
+// Сброс на значения по умолчанию (добавлено в uploadFilterForm на событие 'submit')
+
+var resetUploadFilterForm = function () {
+  imagePreview.classList.remove(currentFilter);
+  resizeControlsValue.value = '100%';
+  uploadDescription.value = '';
+  uploadOverlay.querySelector('#upload-filter-none').checked = true;
+  uploadDescription.style.outline = 'unset';
+};
