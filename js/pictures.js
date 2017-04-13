@@ -255,13 +255,16 @@ var resizeControlsInc = uploadOverlay.querySelector('.upload-resize-controls-but
 var resizeControlsDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
 
 var resizeImage = function (evt) {
-  if (evt.target === resizeControlsInc && resizeControlsValue.value !== '100%') {
-    resizeControlsValue.value = [parseInt(resizeControlsValue.value, 10) + 25, '%'].join('');
-  } else if (evt.target === resizeControlsDec && resizeControlsValue.value !== '25%') {
-    resizeControlsValue.value = [parseInt(resizeControlsValue.value, 10) - 25, '%'].join('');
+  var resizeValue = parseInt(resizeControlsValue.value, 10);
+
+  if (evt.target === resizeControlsInc && resizeValue !== 100) {
+    resizeValue += 25;
+  } else if (evt.target === resizeControlsDec && resizeValue !== 25) {
+    resizeValue -= 25;
   }
 
-  imagePreview.style.transform = ['scale(', parseInt(resizeControlsValue.value, 10) / 100, ')'].join('');
+  resizeControlsValue.value = resizeValue + '%';
+  imagePreview.style.transform = ['scale(', resizeValue / 100, ')'].join('');
 };
 
 resizeControls.addEventListener('click', function (evt) {
