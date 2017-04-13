@@ -278,6 +278,12 @@ uploadDescription.addEventListener('invalid', function (evt) {
   evt.target.style.outline = '4px solid #ff0000';
 });
 
+uploadDescription.addEventListener('input', function (evt) {
+  if (uploadDescription.value.trim().length < uploadDescription.minLength) {
+    evt.target.style.outline = '4px solid #ff0000';
+  }
+});
+
 // Сброс на значения по умолчанию (добавлено в uploadFilterForm на событие 'submit')
 
 var resetUploadFilterForm = function () {
