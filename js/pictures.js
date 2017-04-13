@@ -284,6 +284,8 @@ uploadDescription.addEventListener('invalid', function (evt) {
 uploadDescription.addEventListener('input', function (evt) {
   if (uploadDescription.value.trim().length < uploadDescription.minLength) {
     evt.target.style.outline = '4px solid #ff0000';
+  } else {
+    evt.target.style.outline = 'unset';
   }
 });
 
