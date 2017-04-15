@@ -20,14 +20,6 @@ var photoObjectSettings = {
 
 // Генерация объектов для последующего создания элементов на основе шаблона
 
-function getRandomNumberFromRange(start, end) {
-  return Math.floor(Math.random() * end) + start;
-}
-
-function getRandomArrayElement(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
 function generateUniqueUrlArray(num) {
   var urlArray = [];
 
@@ -46,9 +38,9 @@ function generateCommentsArray(comments, max) {
   var comment1;
   var comment2;
 
-  for (var i = 0, l = getRandomNumberFromRange(1, max); i < l; i++) {
-    comment1 = getRandomArrayElement(comments);
-    comment2 = getRandomArrayElement(comments);
+  for (var i = 0, l = window.utils.getRandomNumberFromRange(1, max); i < l; i++) {
+    comment1 = window.utils.getRandomArrayElement(comments);
+    comment2 = window.utils.getRandomArrayElement(comments);
 
     if (Math.random() > 0.5) {
       if (comment1 === comment2) {
@@ -71,7 +63,7 @@ function generatePhotoObjects(settings) {
   for (var i = 0; i < settings.num; i++) {
     photos.push({
       'url': urls[i],
-      'likes': getRandomNumberFromRange(settings.minLikes, settings.maxLikes),
+      'likes': window.utils.getRandomNumberFromRange(settings.minLikes, settings.maxLikes),
       'comments': generateCommentsArray(COMMENTS, settings.maxComments)
     });
   }
@@ -121,12 +113,10 @@ function makeMainPicture(photo) {
 fillGallery(photoObjectsArray);
 makeMainPicture(photoObjectsArray[0]);
 
-document.querySelector('.upload-overlay').classList.add('invisible');
+var uploadOverlay = document.querySelector('.upload-overlay');
+window.utils.hideElement(uploadOverlay);
 
 // Показ/скрытие картинки в галерее
-
-var ESC_KEY_CODE = 27;
-var ENTER_KEY_CODE = 13;
 
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
@@ -139,23 +129,19 @@ var setGalleryOverlay = function (evt) {
   galleryOverlay.querySelector('.comments-count').textContent = evt.currentTarget.querySelector('.picture-comments').textContent;
 };
 
-var isKeyPressed = function (evt, code) {
-  return evt.keyCode === code;
-};
-
 var onGalleryEscPress = function (evt) {
-  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+  if (window.utils.isEscPressed(evt)) {
     closeGallery();
   }
 };
 
 var openGallery = function () {
-  galleryOverlay.classList.remove('invisible');
+  window.utils.showElement(galleryOverlay);
   document.addEventListener('keydown', onGalleryEscPress);
 };
 
 var closeGallery = function () {
-  galleryOverlay.classList.add('invisible');
+  window.utils.hideElement(galleryOverlay);
   document.removeEventListener('keydown', onGalleryEscPress);
 };
 
@@ -164,7 +150,7 @@ galleryOverlayClose.addEventListener('click', function () {
 });
 
 galleryOverlayClose.addEventListener('keydown', function (evt) {
-  if (isKeyPressed(evt, ENTER_KEY_CODE)) {
+  if (window.utils.isEnterPressed(evt)) {
     closeGallery();
   }
 });
@@ -182,26 +168,25 @@ for (var i = 0; i < pictures.length; i++) {
 // Показ/скрытие формы кадрирования
 
 var uploadForm = document.querySelector('#upload-select-image');
-uploadForm.classList.remove('invisible');
+window.utils.showElement(uploadForm);
 
-var uploadOverlay = document.querySelector('.upload-overlay');
 var uploadFile = uploadForm.querySelector('#upload-file');
 var uploadDesc = uploadOverlay.querySelector('.upload-form-description');
 var uploadFilterForm = document.querySelector('#upload-filter');
 
 var onEscPress = function (evt) {
-  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+  if (window.utils.isEscPressed(evt)) {
     closeUploadOverlay();
   }
 };
 
 var openUploadOverlay = function () {
-  uploadOverlay.classList.remove('invisible');
+  window.utils.showElement(uploadOverlay);
   document.addEventListener('keydown', onEscPress);
 };
 
 var closeUploadOverlay = function () {
-  uploadOverlay.classList.add('invisible');
+  window.utils.hideElement(uploadOverlay);
   document.removeEventListener('keydown', onEscPress);
 };
 
@@ -221,7 +206,7 @@ uploadFilterForm.addEventListener('reset', function () {
 });
 
 uploadDesc.addEventListener('keydown', function (evt) {
-  if (isKeyPressed(evt, ESC_KEY_CODE)) {
+  if (window.utils.isEscPressed(evt)) {
     evt.stopPropagation();
   }
 });
@@ -278,14 +263,14 @@ resizeControls.addEventListener('click', function (evt) {
 var uploadDescription = uploadOverlay.querySelector('.upload-form-description');
 
 uploadDescription.addEventListener('invalid', function (evt) {
-  evt.target.style.outline = '4px solid #ff0000';
+  window.utils.addInvalidOutline(evt.target);
 });
 
 uploadDescription.addEventListener('input', function (evt) {
   if (uploadDescription.value.trim().length < uploadDescription.minLength) {
-    evt.target.style.outline = '4px solid #ff0000';
+    window.utils.addInvalidOutline(evt.target);
   } else {
-    evt.target.style.outline = 'unset';
+    window.utils.removeInvalidOutline(evt.target);
   }
 });
 
@@ -296,5 +281,5 @@ var resetUploadFilterForm = function () {
   resizeControlsValue.value = '100%';
   uploadDescription.value = '';
   uploadOverlay.querySelector('#upload-filter-none').checked = true;
-  uploadDescription.style.outline = 'unset';
+  window.utils.removeInvalidOutline(uploadDescription);
 };
