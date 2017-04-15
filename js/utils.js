@@ -15,11 +15,16 @@ window.utils = (function () {
     isEnterPressed: function (evt) {
       return isKeyPressed(evt, ENTER_KEY_CODE);
     },
+    getRandomNumberFromRange: function (start, end) {
+      return Math.floor(Math.random() * end) + start;
+    },
     getRandomArrayElement: function (array) {
       return array[Math.floor(Math.random() * array.length)];
     },
-    getRandomNumberFromRange: function (start, end) {
-      return Math.floor(Math.random() * end) + start;
+    shuffleArray: function (array) {
+      return array.sort(function () {
+        return 0.5 - Math.random();
+      });
     },
     showElement: function (element) {
       element.classList.remove('invisible');
