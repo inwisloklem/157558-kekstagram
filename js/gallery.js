@@ -1,38 +1,40 @@
 'use strict';
 
 (function () {
-  var onGalleryEscPress = function (evt) {
+  var onGalleryOverlayEscPress = function (evt) {
     if (window.utils.isEscPressed(evt)) {
-      closeGallery();
+      closeGalleryOverlay();
     }
   };
 
-  var openGallery = function () {
+  var openGalleryOverlay = function () {
     window.utils.showElement(window.preview.galleryOverlay);
-    document.addEventListener('keydown', onGalleryEscPress);
+    document.addEventListener('keydown', onGalleryOverlayEscPress);
   };
 
-  var closeGallery = function () {
+  var closeGalleryOverlay = function () {
     window.utils.hideElement(window.preview.galleryOverlay);
-    document.removeEventListener('keydown', onGalleryEscPress);
+    document.removeEventListener('keydown', onGalleryOverlayEscPress);
   };
 
   window.preview.galleryOverlayClose.addEventListener('click', function () {
-    closeGallery();
+    closeGalleryOverlay();
   });
 
   window.preview.galleryOverlayClose.addEventListener('keydown', function (evt) {
     if (window.utils.isEnterPressed(evt)) {
-      closeGallery();
+      closeGalleryOverlay();
     }
   });
+
+  window.picture.fillGallery(window.data.photoObjectsArray);
 
   var pictures = document.querySelectorAll('.picture');
 
   var onPictureClick = function (evt) {
     evt.preventDefault();
     window.preview.setGalleryOverlay(evt);
-    openGallery();
+    openGalleryOverlay();
   };
 
   for (var i = 0; i < pictures.length; i++) {

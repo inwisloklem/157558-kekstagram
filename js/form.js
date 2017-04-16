@@ -21,11 +21,15 @@
   var openUploadOverlay = function () {
     window.utils.showElement(uploadOverlay);
     document.addEventListener('keydown', onEscPress);
+    filterControls.addEventListener('click', onInputClick);
+    resizeControls.addEventListener('click', onButtonClick);
   };
 
   var closeUploadOverlay = function () {
     window.utils.hideElement(uploadOverlay);
     document.removeEventListener('keydown', onEscPress);
+    filterControls.removeEventListener('click', onInputClick);
+    resizeControls.removeEventListener('click', onButtonClick);
   };
 
   uploadFile.addEventListener('change', function () {
@@ -64,11 +68,13 @@
     }
   };
 
-  filterControls.addEventListener('click', function (evt) {
+  var onInputClick = function (evt) {
     if (evt.target.nodeName.toLowerCase() === 'input') {
       addFilter('filter-' + evt.target.value);
     }
-  });
+  };
+
+  filterControls.addEventListener('click', onInputClick);
 
   // Изменение масштаба изображения
 
@@ -90,11 +96,11 @@
     imagePreview.style.transform = ['scale(', resizeValue / 100, ')'].join('');
   };
 
-  resizeControls.addEventListener('click', function (evt) {
+  var onButtonClick = function (evt) {
     if (evt.target.nodeName.toLowerCase() === 'button') {
       resizeImage(evt);
     }
-  });
+  };
 
   // Выделение незаполненного поля комментария красной рамкой
 

@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.picture = function () {
   var makeGalleryPicture = function (photo, template) {
     var photoElement = template.cloneNode(true);
 
@@ -28,6 +28,7 @@
     document.querySelector('.pictures').appendChild(fragment);
   };
 
-  fillGallery(window.data.photoObjectsArray);
-})();
-
+  return {
+    fillGallery: fillGallery
+  };
+}();

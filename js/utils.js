@@ -1,6 +1,6 @@
 'use strict';
 
-window.utils = (function () {
+window.utils = function () {
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
 
@@ -39,4 +39,4 @@ window.utils = (function () {
       element.style.outline = 'unset';
     }
   };
-})();
+}();
