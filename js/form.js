@@ -21,9 +21,7 @@
   var openUploadOverlay = function () {
     window.utils.showElement(uploadOverlay);
     document.addEventListener('keydown', onEscPress);
-    resizeControls.addEventListener('click', onButtonClick);
     uploadFilterLevelPin.addEventListener('mousedown', onFilterPinMousedown);
-    uploadFilterControls.addEventListener('click', onInputClick);
     uploadDesc.addEventListener('invalid', onTextareaInvalid);
     uploadDesc.addEventListener('input', onTextareaInput);
     uploadDesc.addEventListener('keydown', onTextareaKeydown);
@@ -32,9 +30,7 @@
   var closeUploadOverlay = function () {
     window.utils.hideElement(uploadOverlay);
     document.removeEventListener('keydown', onEscPress);
-    resizeControls.removeEventListener('click', onButtonClick);
     uploadFilterLevelPin.removeEventListener('mousedown', onFilterPinMousedown);
-    uploadFilterControls.removeEventListener('click', onInputClick);
     uploadDesc.removeEventListener('invalid', onTextareaInvalid);
     uploadDesc.removeEventListener('input', onTextareaInput);
     uploadDesc.removeEventListener('keydown', onTextareaKeydown);
@@ -72,19 +68,6 @@
   var uploadFilterLevelPin = uploadFilterLevelLine.querySelector('.upload-filter-level-pin');
 
   window.utils.hideElement(uploadFilterLevel);
-
-  var currentFilter;
-
-  var addFilter = function (filter) {
-    imagePreview.classList.remove(currentFilter);
-    if (filter !== 'filter-none') {
-      imagePreview.classList.add(filter);
-      window.utils.showElement(uploadFilterLevel);
-      currentFilter = filter;
-    } else {
-      window.utils.hideElement(uploadFilterLevel);
-    }
-  };
 
   var onFilterPinMousedown = function (evt) {
     evt.preventDefault();
@@ -147,38 +130,34 @@
     imagePreview.style.filter = '';
   };
 
-  var onInputClick = function (evt) {
-    if (evt.target.nodeName.toLowerCase() === 'input') {
-      addFilter('filter-' + evt.target.value);
-      setDefaultFilterLevel();
+  var currentFilter;
+
+  var addFilter = function (filter) {
+    setDefaultFilterLevel();
+    imagePreview.classList.remove(currentFilter);
+    if (filter !== 'filter-none') {
+      imagePreview.classList.add(filter);
+      window.utils.showElement(uploadFilterLevel);
+      currentFilter = filter;
+    } else {
+      window.utils.hideElement(uploadFilterLevel);
     }
   };
 
+  window.initializeFilters(uploadFilterControls, addFilter);
+
   // Изменение масштаба изображения
 
-  var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
   var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
   var resizeControlsInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
   var resizeControlsDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
 
-  var resizeImage = function (evt) {
-    var resizeValue = parseInt(resizeControlsValue.value, 10);
-
-    if (evt.target === resizeControlsInc && resizeValue !== 100) {
-      resizeValue += 25;
-    } else if (evt.target === resizeControlsDec && resizeValue !== 25) {
-      resizeValue -= 25;
-    }
-
-    resizeControlsValue.value = resizeValue + '%';
-    imagePreview.style.transform = ['scale(', resizeValue / 100, ')'].join('');
+  var resizeImage = function (value) {
+    resizeControlsValue.value = value + '%';
+    imagePreview.style.transform = ['scale(', value / 100, ')'].join('');
   };
 
-  var onButtonClick = function (evt) {
-    if (evt.target.nodeName.toLowerCase() === 'button') {
-      resizeImage(evt);
-    }
-  };
+  window.initializeScale(resizeControlsInc, resizeControlsDec, parseInt(resizeControlsValue.value, 10), 25, 100, 25, resizeImage);
 
   // Выделение незаполненного поля комментария красной рамкой
 
