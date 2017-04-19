@@ -1,10 +1,22 @@
 'use strict';
 
-window.initializeFilters = function (container, callback) {
+window.initializeFilters = function (settings) {
   var onInputClick = function (evt) {
     if (evt.target.nodeName.toLowerCase() === 'input') {
-      callback('filter-' + evt.target.value);
+      settings.onChange('filter-' + evt.target.value);
     }
   };
-  container.addEventListener('click', onInputClick);
+
+  var addEventListeners = function () {
+    settings.container.addEventListener('click', onInputClick);
+  };
+
+  var removeEventListeners = function () {
+    settings.container.removeEventListener('click', onInputClick);
+  };
+
+  return {
+    addEventListeners: addEventListeners,
+    removeEventListeners: removeEventListeners
+  };
 };

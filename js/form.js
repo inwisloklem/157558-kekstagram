@@ -15,6 +15,7 @@
   var onEscPress = function (evt) {
     if (window.utils.isEscPressed(evt)) {
       closeUploadOverlay();
+      resetUploadFilterForm();
     }
   };
 
@@ -25,6 +26,8 @@
     uploadDesc.addEventListener('invalid', onTextareaInvalid);
     uploadDesc.addEventListener('input', onTextareaInput);
     uploadDesc.addEventListener('keydown', onTextareaKeydown);
+    scale.addEventListeners();
+    filters.addEventListeners();
   };
 
   var closeUploadOverlay = function () {
@@ -34,6 +37,8 @@
     uploadDesc.removeEventListener('invalid', onTextareaInvalid);
     uploadDesc.removeEventListener('input', onTextareaInput);
     uploadDesc.removeEventListener('keydown', onTextareaKeydown);
+    scale.removeEventListeners();
+    filters.removeEventListeners();
   };
 
   uploadFile.addEventListener('change', function () {
@@ -144,7 +149,12 @@
     }
   };
 
-  window.initializeFilters(uploadFilterControls, addFilter);
+  var filtersSettings = {
+    container: uploadFilterControls,
+    onChange: addFilter
+  };
+
+  var filters = window.initializeFilters(filtersSettings);
 
   // Изменение масштаба изображения
 
@@ -157,7 +167,14 @@
     imagePreview.style.transform = ['scale(', value / 100, ')'].join('');
   };
 
-  window.initializeScale(resizeControlsInc, resizeControlsDec, parseInt(resizeControlsValue.value, 10), 25, 100, 25, resizeImage);
+  var scaleSettings = {
+    controlInc: resizeControlsInc,
+    controlDec: resizeControlsDec,
+    currentValue: parseInt(resizeControlsValue.value, 10),
+    onChange: resizeImage
+  };
+
+  var scale = window.initializeScale(scaleSettings);
 
   // Выделение незаполненного поля комментария красной рамкой
 
@@ -178,6 +195,8 @@
   var resetUploadFilterForm = function () {
     imagePreview.classList.remove(currentFilter);
     resizeControlsValue.value = '100%';
+    imagePreview.style.transform = 'scale(1)';
+    scaleSettings.currentValue = 100;
     uploadDesc.value = '';
     uploadOverlay.querySelector('#upload-filter-none').checked = true;
     window.utils.removeInvalidOutline(uploadDesc);
