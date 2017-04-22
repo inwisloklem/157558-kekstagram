@@ -26,6 +26,18 @@ window.picture = function () {
     var fragment = makeFragment(photos, template);
 
     document.querySelector('.pictures').appendChild(fragment);
+
+    var pictures = document.querySelectorAll('.picture');
+
+    var onPictureClick = function (evt) {
+      evt.preventDefault();
+      window.preview.setGalleryOverlay(evt);
+      window.gallery.openGalleryOverlay();
+    };
+
+    for (var i = 0; i < pictures.length; i++) {
+      pictures[i].addEventListener('click', onPictureClick);
+    }
   };
 
   return {
