@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.gallery = function () {
   var onGalleryOverlayEscPress = function (evt) {
     if (window.utils.isEscPressed(evt)) {
       closeGalleryOverlay();
@@ -27,17 +27,19 @@
     }
   });
 
-  window.picture.fillGallery(window.data.photoObjectsArray);
+  var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
 
-  var pictures = document.querySelectorAll('.picture');
+  var onLoadError = function (errorMessage) {
+    var errorOverlay = document.body.querySelector('.error-overlay');
 
-  var onPictureClick = function (evt) {
-    evt.preventDefault();
-    window.preview.setGalleryOverlay(evt);
-    openGalleryOverlay();
+    errorOverlay.textContent = errorMessage;
+    window.utils.showElement(errorOverlay);
   };
 
-  for (var i = 0; i < pictures.length; i++) {
-    pictures[i].addEventListener('click', onPictureClick);
-  }
-})();
+  window.load(URL, window.picture.fillGallery, onLoadError);
+
+  return {
+    openGalleryOverlay: openGalleryOverlay,
+    closeGalleryOverlay: closeGalleryOverlay
+  };
+}();
