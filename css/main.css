@@ -796,8 +796,6 @@ input[type=radio]:checked + .upload-filter-label .upload-filter-preview {
   opacity: 1;
 }
 
-
-
 .footer-social-item-instagram {
   background-position: -28px 0;
 }
@@ -808,4 +806,17 @@ input[type=radio]:checked + .upload-filter-label .upload-filter-preview {
 
 .footer-social-item-vk {
   background-position: -84px 0;
+}
+
+.error-overlay {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  padding: 20px 40px;
+  color: #f00;
+  background-color: #fff;
+  border: 4px solid #f00;
+  font-size: 18px;
+  transform: translate(-50%, -50%);
 }

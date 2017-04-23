@@ -30,22 +30,10 @@ window.gallery = function () {
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
 
   var onLoadError = function (errorMessage) {
-    var errorNode = document.createElement('div');
+    var errorOverlay = document.querySelector('.error-overlay');
 
-    errorNode.style.position = 'fixed';
-    errorNode.style.left = '50%';
-    errorNode.style.top = '50%';
-    errorNode.style.zIndex = 5;
-    errorNode.style.padding = '20px 40px';
-    errorNode.style.color = '#f00';
-    errorNode.style.backgroundColor = '#fff';
-    errorNode.style.border = '4px solid #f00';
-    errorNode.style.fontSize = '18px';
-    errorNode.style.transform = 'translate(-50%, -50%)';
-
-    errorNode.textContent = errorMessage;
-
-    document.body.insertAdjacentElement('afterbegin', errorNode);
+    errorOverlay.textContent = errorMessage;
+    window.utils.showElement(errorOverlay);
   };
 
   window.load(URL, window.picture.fillGallery, onLoadError);
