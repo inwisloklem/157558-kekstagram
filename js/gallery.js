@@ -30,7 +30,7 @@ window.gallery = function () {
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
 
   var onLoadError = function (errorMessage) {
-    var errorOverlay = document.querySelector('.error-overlay');
+    var errorOverlay = document.body.querySelector('.error-overlay');
 
     errorOverlay.textContent = errorMessage;
     window.utils.showElement(errorOverlay);
