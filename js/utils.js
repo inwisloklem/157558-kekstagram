@@ -27,7 +27,11 @@ window.utils = function () {
       });
     },
     showElement: function (element) {
-      element.classList.remove('invisible');
+      if (element.classList.contains('invisible')) {
+        element.classList.remove('invisible');
+      } else if (element.classList.contains('hidden')) {
+        element.classList.remove('hidden');
+      }
     },
     hideElement: function (element) {
       element.classList.add('invisible');
@@ -37,6 +41,14 @@ window.utils = function () {
     },
     removeInvalidOutline: function (element) {
       element.style.outline = 'unset';
+    },
+    debounce: function (fun) {
+      var lastTimeout;
+
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(fun, 100000);
     }
   };
 }();

@@ -1,6 +1,8 @@
 'use strict';
 
 window.gallery = function () {
+  var photosList;
+
   var onGalleryOverlayEscPress = function (evt) {
     if (window.utils.isEscPressed(evt)) {
       closeGalleryOverlay();
@@ -29,6 +31,11 @@ window.gallery = function () {
 
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
 
+  var onLoadSuccess = function (data) {
+    window.gallery.photosList = data;
+    window.picture.fillGallery(data);
+  };
+
   var onLoadError = function (errorMessage) {
     var errorOverlay = document.body.querySelector('.error-overlay');
 
@@ -36,10 +43,11 @@ window.gallery = function () {
     window.utils.showElement(errorOverlay);
   };
 
-  window.load(URL, window.picture.fillGallery, onLoadError);
+  window.load(URL, onLoadSuccess, onLoadError);
 
   return {
     openGalleryOverlay: openGalleryOverlay,
-    closeGalleryOverlay: closeGalleryOverlay
+    closeGalleryOverlay: closeGalleryOverlay,
+    photosList: photosList
   };
 }();
