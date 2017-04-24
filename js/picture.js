@@ -19,7 +19,7 @@ window.picture = function () {
         list = window.gallery.photosList;
     }
 
-    window.setTimeout(fillGallery(list), 5000);
+    window.utils.debounce(fillGallery, list);
   };
 
   filters.addEventListener('click', function (evt) {

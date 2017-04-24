@@ -3,6 +3,7 @@
 window.utils = function () {
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
+  var DEBOUNCE_INTERVAL = 300;
 
   var isKeyPressed = function (evt, code) {
     return evt.keyCode === code;
@@ -42,13 +43,13 @@ window.utils = function () {
     removeInvalidOutline: function (element) {
       element.style.outline = 'unset';
     },
-    debounce: function (fun) {
+    debounce: function (fun, args) {
       var lastTimeout;
 
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }
-      lastTimeout = window.setTimeout(fun, 100000);
+      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL, args);
     }
   };
 }();
