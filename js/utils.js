@@ -28,11 +28,7 @@ window.utils = function () {
       });
     },
     showElement: function (element) {
-      if (element.classList.contains('invisible')) {
-        element.classList.remove('invisible');
-      } else if (element.classList.contains('hidden')) {
-        element.classList.remove('hidden');
-      }
+      element.classList.remove('invisible', 'hidden');
     },
     hideElement: function (element) {
       element.classList.add('invisible');
