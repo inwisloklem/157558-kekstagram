@@ -3,7 +3,7 @@
 window.load = function (url, onLoad, onError) {
   var xhr = new XMLHttpRequest();
 
-  xhr.timeout = 1000;
+  xhr.timeout = 5000;
   xhr.responseType = 'json';
 
   xhr.open('GET', url);
