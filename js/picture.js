@@ -2,6 +2,7 @@
 
 window.picture = function () {
   var filters = document.body.querySelector('.filters');
+  var picturesContainer = document.querySelector('.pictures');
 
   var filterPhotos = function (evt) {
     var list;
@@ -41,9 +42,9 @@ window.picture = function () {
   var makeFragment = function (photos, template) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < photos.length; i++) {
-      fragment.appendChild(makeGalleryPicture(photos[i], template));
-    }
+    photos.forEach(function (photo) {
+      fragment.appendChild(makeGalleryPicture(photo, template));
+    });
 
     return fragment;
   };
@@ -51,10 +52,9 @@ window.picture = function () {
   var fillGallery = function (photos) {
     var template = document.querySelector('#picture-template').content;
     var fragment = makeFragment(photos, template);
-    var container = document.querySelector('.pictures');
 
-    container.innerHTML = '';
-    container.appendChild(fragment);
+    picturesContainer.innerHTML = '';
+    picturesContainer.appendChild(fragment);
 
     var pictures = document.querySelectorAll('.picture');
 
@@ -64,9 +64,9 @@ window.picture = function () {
       window.gallery.openGalleryOverlay();
     };
 
-    for (var i = 0; i < pictures.length; i++) {
-      pictures[i].addEventListener('click', onPictureClick);
-    }
+    pictures.forEach(function (picture) {
+      picture.addEventListener('click', onPictureClick);
+    });
 
     window.utils.showElement(filters);
   };
